@@ -1,20 +1,40 @@
-function plot_signal(signal, figure_num, varargin) % Input args: signal, figure number, plot title,     
+function plot_signal(varargin) % Input args: signal, figure number, plot title,     
     
     % Definim els paràmtres per defecte
-    defaultParams = struct('title', 'Plot', 'axis', 0, 'discreete', false);
+    defaultParams = struct('figure_num', 1, 'signal_1', [0 0], 'signal_2', [0 0], 'title_1', 'Plot_t', 'title_2', 'Plot_f', 'axis', 0, 'discreete', false, 'num_plots', 2);
     
     % Parsegem els parèmtres per defecte
     params = parseOptionalParams(defaultParams, varargin{:});
     
     % Mostrem els missatge original
-    figure(figure_num);
-    if params.discreete == false
-        plot(signal), grid on;
+    figure(params.figure_num);
+    if params.num_plots == 1
+        if params.discreete == false
+            plot(params.signal_1), grid on;
+        else
+            stem(params.signal_1), grid on;
+        end
+        title(params.title_1);
+        axis(params.axis);
     else
-        stem(signal), grid on;
+        subplot(params.num_plots,1,1);
+        if params.discreete == false
+            plot(params.signal_1), grid on;
+        else
+            stem(params.signal_1), grid on;
+        end
+        title(params.title_1);
+        axis(params.axis);
+
+        subplot(params.num_plots,1,2);
+        if params.discreete == false
+            plot(params.signal_2), grid on;
+        else
+            stem(params.signal_2), grid on;
+        end
+        title(params.title_2);
     end
-    title(params.title);
-    axis(params.axis);
+
 
     function params = parseOptionalParams(defaultParams, varargin)
         % Create an input parser
