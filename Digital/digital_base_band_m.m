@@ -3,7 +3,8 @@ close all;
 
 % Missatge a transmetre
 missatge = [0 1 0 0 0 0 0 1 0 1 1 0 1 1 0 0 0 1 1 0 0 1 0 1 0 1 1 0 1 0 0 1 0 1 1 1 1 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 1 0 1 0 0 1 1 0 1 1 1 1 0 1 1 1 0 0 1 0 0 1 1 0 0 1 0 0 0 1 1 0 0 0 0 1 0 0 1 0 0 0 0 0 0 1 0 0 0  0 1 0 0 1 1 0 0 0 0 1 0 1 1 0 1 1 1 0 0 1 1 1 0 1 0 1 0 1 1 1 0 0 1 1 0 0 1 0 0 0 0 0 0 1 1 0 1 0 0 1 0 0 1 0 0 0 0 0 0 1 0 0 1 0 1 0 0 1 1 0 0 0 0 1 0 1 1 0 1 1 1 0 0 0 1 0 0 0 0 0 0 1 0 0 1 1 0 1 0 1 1 0 1 1 1 1 0 1 1 1 0 0 1 0 0 1 1 0 0 0 0 1 0 1 1 0 1 1 1 0 0 0 1 0 0 0 0 0 0 1 0 1 0 0 1 0 0 1 1 0 1 0 0 1 0 1 1 0 0 0 1 1 0 1 1 0 0 0 0 1 0 1 1 1 0 0 1 0 0 1 1 0 0 1 0 0 0 1 1 0 1 1 1 1];
-plot_signal(missatge, 1, title='Missage original');
+DMM = 10; % DM = Divisions del Missatge a Mostrar
+plot_signal(missatge, 1, title='Missage original', axis=[ 0 DMM -1.25 1.25], discreete=true);
 
 
 % ------------------------------------------------- Modulador
@@ -15,42 +16,69 @@ A = 2; % Amplitut del missatge
 a=2*A*missatge-A; % Bipolar: Valors A o -A 
 
 
-plot_signal(a, 2, title='a(t) Bipolar', axis=[ 0 10 (-A - .25) (A + .25)]);
+plot_signal(a, 2, title='a(t) Bipolar', axis=[ 0 DMM (-A - .25) (A + .25)], discreete=true);
 
 % --------- Conformador de polsos
 
-f_m = 10000;
-T_m = 1/f_m;
-div = 20; % nombre de divisions del pols
-
-T_pols = 0:T_m/div:T_m;
+% Creem una funció pols de f=10kHz 
+div = 20; 
+T_pols = 0:1/div:1;
 p = square(T_pols);
 
 
+%Creem senyal transmesa
 s = [];
-
 for i=1:length(a)
     s = [s a(i)*p];
 end
-   
-figure(3)
-plot(s), grid on;
-title('s(t)');
-axis([ 0 div*10 -1.25 1.25]);
+
+plot_signal(p, 3, title='p(t)', axis=[ 0 (div + 1) (-A - .25) (A + .25)], discreete=true);
+plot_signal(s, 4, title='s(t)', axis=[ 0 (div * DMM) (-A - .25) (A + .25)]);
 
 
+% ------------------------------------------------- Canal
+% canal ideal amb retard de -6
+h_c = zeros(1, div);
+h_c(6) = 1;
+
+r_c = conv(s, h_c); % Sortida del canal (sense soroll) 
+
+W = .5; % Amplitut del soroll
+w = W*rand(1,length(r));
+
+r = r_c + w; % entrada receptor (amb soroll)
+
+
+
+
+plot_signal(h_c, 5, title='h_c(t)', axis=[ 0 (div + 1) -1.25 1.25], discreete=true);
+plot_signal(r_c, 7, title='r_c(t)', axis=[ 0 (div * DMM) (-A -W - .25) (A +W + .25)]);
+plot_signal(w, 6, title='w(t)', axis=[ 0 (div * DMM) (-W - .25) (W + .25)]);
+plot_signal(r, 8, title='r(t)', axis=[ 0 (div * DMM) (-A- .25) (A + W + .25)]);
+
+
+% ------------------------------------------------- Receptor
+
+
+
+
+% ------------------------------------------------- Altres funcions
 function plot_signal(signal, figure_num, varargin) % Input args: signal, figure number, plot title,     
     
     % Definim els paràmtres per defecte
-    defaultParams = struct('title', 'Plot', 'axis', [ 0 10 -1.25 1.25]);
+    defaultParams = struct('title', 'Plot', 'axis', 0, 'discreete', false);
     
     % Parsegem els parèmtres per defecte
     params = parseOptionalParams(defaultParams, varargin{:});
     
     % Mostrem els missatge original
     figure(figure_num);
-    stem(signal), grid on;
-    title(params.text);
+    if params.discreete == false
+        plot(signal), grid on;
+    else
+        stem(signal), grid on;
+    end
+    title(params.title);
     axis(params.axis);
 end
 
