@@ -4,7 +4,7 @@ function plot_signal(varargin) % Input args: signal, figure number, plot title,
     defaultParams = struct('figure_num', 1, 'signal_1', [0 0], 'signal_2', [0 0], 'title_1', 'Plot_t', 'title_2', 'Plot_f', 'axis', 0, 'discreete', false, 'num_plots', 2);
     
     % Parsegem els parèmtres per defecte
-    params = parseOptionalParams(defaultParams, varargin{:});
+    params = parse_optional_params(defaultParams, varargin{:});
     
     % Mostrem els missatge original
     figure(params.figure_num);
