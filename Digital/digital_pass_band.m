@@ -9,19 +9,20 @@ missatge = [0 1 0 0 0 0 0 1 0 1 1 0 1 1 0 0 0 1 1 0 0 1 0 1 0 1 1 0 1 0 0 1 0 1 
 A = 2;
 min_cos_A = .2;
 llista_valors = [A, -A];
-div = 1000; % intentem que sigui superior a la meitat del delay del canal ja que els receptors accionen en div/2
+div = 4000; % intentem que sigui superior a la meitat del delay del canal ja que els receptors accionen en div/2
 
 DMM = 10; % DM = Divisions del Missatge a Mostrar
 plot_signal(signal_1=missatge, figure_num=1, title_1='Missage original', axis=[ 0 DMM -1.25 1.25], discreete=true, num_plots=1);
 
 % -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Modulador
 
-signals_mod = mod_ask(missatge=missatge, A=A, num_bits=1, f=10);
+signals_mod = mod_ask(missatge=missatge, A=A, num_bits=1);
 
 
 % --------- Ploting senyals del modulador 
 plot_signal(signal_1=signals_mod.a, figure_num=2, title_1='a(t) Bipolar', axis=[ 0 100 (-A - .25) (A + .25)], discreete=true, num_plots=1);
-plot_signal(signal_1=signals_mod.s, signal_2=signals_mod.S, figure_num=4, title_1='s(t)', title_2='S(f)', axis=[ 0 (div) (-A -min_cos_A - .25) (A +min_cos_A + .25)]);
+plot_signal(signal_1=signals_mod.s, signal_2=signals_mod.S, figure_num=3, title_1='s(t)', title_2='S(f)', axis=[ 0 (div) (-A -min_cos_A - .25) (A +min_cos_A + .25)]);
+plot_signal(signal_1=signals_mod.s_mod, signal_2=signals_mod.S_mod, figure_num=4, title_1='s(t)', title_2='S(f)', axis=[ 0 (div) (-A -min_cos_A - .25) (A +min_cos_A + .25)]);
 
 % -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Canal
 signals_ch = canal(s=signals_mod.s,divisions_pols=div,delay=3);
