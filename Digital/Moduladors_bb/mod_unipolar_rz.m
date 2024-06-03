@@ -1,4 +1,4 @@
-function signals = mod_unipolar_nrz(varargin) % Senyals són a, p, s
+function signals = mod_unipolar_rz(varargin) % Senyals són a, p, s
 
     % Parsegem els parèmtres per defecte
     defaultParams = struct('missatge', [0 0], 'A', 1, 'divisions_pols', 10);

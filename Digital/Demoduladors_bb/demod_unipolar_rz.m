@@ -1,4 +1,4 @@
-function signals = demod_unipolar_nrz(varargin)
+function signals = demod_unipolar_rz(varargin)
     % Parsegem els parèmtres per defecte
     defaultParams = struct('r', [0 0], 'divisions_pols', 10, 'llista_valors', [2 0]);
     params = parse_optional_params(defaultParams, varargin{:});
