@@ -1,5 +1,7 @@
 function signals = canal(varargin)
+
     % Parsegem els parèmtres per defecte
+
     defaultParams = struct('s', [0 0], 'divisions_pols', 10, 'delay', 1, 'W', .5);
     params = parse_optional_params(defaultParams, varargin{:});
 

@@ -7,7 +7,8 @@ addpath('_generic_functions');
 % Missatge a transmetre → Aleix Jorda Banus i Jan Moran Ricardo
 missatge = [0 1 0 0 0 0 0 1 0 1 1 0 1 1 0 0 0 1 1 0 0 1 0 1 0 1 1 0 1 0 0 1 0 1 1 1 1 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 1 0 1 0 0 1 1 0 1 1 1 1 0 1 1 1 0 0 1 0 0 1 1 0 0 1 0 0 0 1 1 0 0 0 0 1 0 0 1 0 0 0 0 0 0 1 0 0 0  0 1 0 0 1 1 0 0 0 0 1 0 1 1 0 1 1 1 0 0 1 1 1 0 1 0 1 0 1 1 1 0 0 1 1 0 0 1 0 0 0 0 0 0 1 1 0 1 0 0 1 0 0 1 0 0 0 0 0 0 1 0 0 1 0 1 0 0 1 1 0 0 0 0 1 0 1 1 0 1 1 1 0 0 0 1 0 0 0 0 0 0 1 0 0 1 1 0 1 0 1 1 0 1 1 1 1 0 1 1 1 0 0 1 0 0 1 1 0 0 0 0 1 0 1 1 0 1 1 1 0 0 0 1 0 0 0 0 0 0 1 0 1 0 0 1 0 0 1 1 0 1 0 0 1 0 1 1 0 0 0 1 1 0 1 1 0 0 0 0 1 0 1 1 1 0 0 1 0 0 1 1 0 0 1 0 0 0 1 1 0 1 1 1 1];
 A = 2;
-llista_valors = [A, -A];
+llista_valors = [A, -A]; % bipolar
+% llista_valors = [A, 0]; % unipolar
 div = 20; % intentem que sigui superior a la meitat del delay del canal ja que els receptors accionen en div/2
 W = .75;
 DMM = 10; % DM = Divisions del Missatge a Mostrar
@@ -27,6 +28,9 @@ plot_signal(signal_1=signals_mod.s, signal_2=signals_mod.S, figure_num=4, title_
 
 % -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Canal
 signals_ch = canal(s=signals_mod.s,divisions_pols=div,W=W);
+
+% Soroll
+W = .5;
 
 
 % --------- Ploting senyals del canal
