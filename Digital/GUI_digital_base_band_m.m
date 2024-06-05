@@ -15,7 +15,7 @@ if isempty(A)
 end
 
 % Demanem a l'usuari el soroll
-W = input("Introdueix el soroll de la senyal (Enter per defecte): ");
+W = input("Introdueix la variança de la senyal del soroll (Enter per defecte): ");
 if isempty(W)
     W = .5;
 end
