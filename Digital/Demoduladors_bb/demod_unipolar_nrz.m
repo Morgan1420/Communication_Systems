@@ -1,11 +1,10 @@
-function signals = demod_bipolar_nrz(varargin)
+function signals = demod_unipolar_nrz(varargin)
     % Parsegem els parèmtres per defecte
     defaultParams = struct('r', [0 0], 'divisions_pols', 10, 'llista_valors', [1 -1], 'A', 1);
     params = parse_optional_params(defaultParams, varargin{:});
 
     % Creem la estructura que retornarèm
     signals = struct('h_r', [], 'y', [], 'Y', [], 'y_KT', [], 'Y_KT', [], 'a_KT', [], 'b_r', []);
-
 
     % ----------------------------- Filtre receptor
     signals.h_r = zeros(1, params.divisions_pols);
@@ -15,13 +14,11 @@ function signals = demod_bipolar_nrz(varargin)
     signals.y = conv(params.r,signals.h_r);
     signals.Y = transformada_fourier(signals.y);
 
-
     % ----------------------------- Dades rebudes
     signals.y_KT = [];
     for i = (params.divisions_pols/2):params.divisions_pols+1:length(signals.y)
         signals.y_KT = [signals.y_KT signals.y(i)];
     end
-
 
     % ----------------------------- Detector de nivell
     signals.a_KT = [];
@@ -30,15 +27,14 @@ function signals = demod_bipolar_nrz(varargin)
     end
 
     % ----------------------------- Decodificador de linea
-    signals.b_r = back_to_binary_bipolar(signals.a_KT);
+    signals.b_r = back_to_binary_unipolar(signals.a_KT, params.A);
 
 
-    
     % ----------------------------- Funcions extra
-    function missatge = back_to_binary_bipolar(a)
+    function missatge = back_to_binary_unipolar(a, A)
         missatge = [];
         for j = 1:length(a)
-            if a(j) > 0
+            if a(j) > A/2
                 missatge = [missatge 1];
             else
                 missatge = [missatge 0];
