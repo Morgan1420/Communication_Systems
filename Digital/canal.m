@@ -18,7 +18,7 @@ function signals = canal(varargin)
 
     % creem un soroll 
     noise_mean = 0; % la mitjana en el cas d'un soroll seguint una distribució gausiana normal es 0
-    noise_std = params.W; % Aquest valor depèn de diferents factors, nosaltres el situem a 1 per simplicitat
+    noise_std = params.W; % Aquest valor depèn de diferents factors, nosaltres el situem a .5 per simplicitat
     signals.w  = noise_mean + noise_std * randn(size(signals.g));
     
 

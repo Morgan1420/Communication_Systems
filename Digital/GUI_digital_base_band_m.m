@@ -8,6 +8,20 @@ addpath('_generic_functions');
 opcions = ["Bipolar NRZ", "Unipolar NRZ", "Unipolar RZ", "Manchester"];
 opcio = menu("Escull la modulació", opcions);
 
+% Demanem a l'usuari l'amplitud de la senyal
+A = input("Introdueix l'amplitud de la senyal (Enter per defecte): ");
+if isempty(A)
+    A = 2;
+end
+
+% Demanem a l'usuari el soroll
+W = input("Introdueix el soroll de la senyal (Enter per defecte): ");
+if isempty(W)
+    W = .5;
+end
+
+div = 20; % intentem que sigui superior a la meitat del delay del canal ja que els receptors accionen en div/2
+
 % Demanem a l'usuari el missatge a transmetre
 missatge_s = input("Introdueix el missatge a transmetre (Enter per defecte): ", 's');
 disp("Missatge introduit: " + missatge_s)
@@ -19,9 +33,6 @@ end
 % Convertim el missatge a un array de bits
 missatge = ascii_to_binary_array(missatge_s);
 
-A = 2; % Amplitud
-W = .5; % Soroll
-div = 20; % intentem que sigui superior a la meitat del delay del canal ja que els receptors accionen en div/2
 
 DMM = 10; % DM = Divisions del Missatge a Mostrar
 plot_signal(signal_1=missatge, figure_num=1, title_1='Missage original', axis=[ 0 DMM -1.25 1.25], discreete=true, num_plots=1);
@@ -86,11 +97,19 @@ plot_signal(signal_1=signals_dem.a_KT, figure_num=11, title_1='â(t)', axis=[ 0 
 plot_signal(signal_1=missatge, signal_2=signals_dem.b_r, figure_num=12, title_1='missatge enviat', title_2='missatge rebut', axis=[ 0 (div * DMM) (-A- .25) (A +  .25)], discreete=true);
 
 % -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Resultats
-disp("Missatge original: " + binary_array_to_ascii(missatge))
-disp("Missatge rebut: " + binary_array_to_ascii(signals_dem.b_r))
+disp("Missatge original: " + binary_array_to_ascii(missatge));
+disp("Missatge rebut: " + binary_array_to_ascii(signals_dem.b_r));
 % Comparar el missatge rebut amb el missatge original
 if isequal(binary_array_to_ascii(missatge), binary_array_to_ascii(signals_dem.b_r))
-    disp("Missatge rebut correctament")
+    disp("Missatge rebut correctament");
 else
-    disp("Missatge rebut incorrectament")
+    disp("Missatge rebut incorrectament");
+    disp("");
+    % BER (Bit Error Rate)
+    disp("Length missatge (binary array): " + length(missatge))
+    disp("Number of missmatches: " + missatges_missmatch(missatge, signals_dem.b_r))
+    % Error a lectura de caràcters
+    disp("Length missatge (ascii): " + length(binary_array_to_ascii(missatge)) + " caràcters")
+    disp("Number of characters missmatches: " + missatges_missmatch(binary_array_to_ascii(missatge), binary_array_to_ascii(signals_dem.b_r)))
+
 end
