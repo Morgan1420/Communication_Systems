@@ -5,7 +5,7 @@ addpath('Digital/Demoduladors_bb');
 addpath('_generic_functions');
 
 % Fem una llista d'opcions per a que l'usuari pugui escollir les diferents modulacions
-opcions = ["Bipolar NRZ", "Unipolar NRZ", "Unipolar RZ", "Manchester"];
+opcions = ["Bipolar NRZ", "Unipolar NRZ", "Bipolar RZ", "Unipolar RZ", "Manchester"];
 opcio = menu("Escull la modulació", opcions);
 
 % Demanem a l'usuari l'amplitud de la senyal
@@ -52,14 +52,21 @@ switch opcio
         signals_ch = canal(s=signals_mod.s,divisions_pols=div, W=W);
         % RECEPTOR
         signals_dem = demod_unipolar_nrz(r=signals_ch.r, divisions_pols=div);
-    case 3 % Unipolar RZ
+    case 3 % Bipolar RZ
+        % MODULADOR
+        signals_mod = mod_bipolar_rz(missatge=missatge, A=A, divisions_pols=div);
+        % CANAL
+        signals_ch = canal(s=signals_mod.s,divisions_pols=div, W=W);
+        % RECEPTOR
+        signals_dem = demod_bipolar_rz(r=signals_ch.r, divisions_pols=div);
+    case 4 % Unipolar RZ
         % MODULADOR
         signals_mod = mod_unipolar_rz(missatge=missatge, A=A, divisions_pols=div);
         % CANAL
         signals_ch = canal(s=signals_mod.s,divisions_pols=div, W=W);
         % RECEPTOR
         signals_dem = demod_unipolar_rz(r=signals_ch.r, divisions_pols=div);
-    case 4 % Manchester
+    case 5 % Manchester
         % MODULADOR
         signals_mod = mod_manchester(missatge=missatge, A=A, divisions_pols=div);
         % CANAL
