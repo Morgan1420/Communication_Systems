@@ -1,6 +1,8 @@
 function signals = demod_unipolar_nrz(varargin)
     % Parsegem els parèmtres per defecte
-    defaultParams = struct('r', [0 0], 'divisions_pols', 10, 'llista_valors', [2 0]);
+
+    defaultParams = struct('r', [0 0], 'divisions_pols', 10, 'llista_valors', [1 -1], 'A', 1);
+
     params = parse_optional_params(defaultParams, varargin{:});
 
     % Creem la estructura que retornarèm
@@ -30,15 +32,15 @@ function signals = demod_unipolar_nrz(varargin)
     end
 
     % ----------------------------- Decodificador de linea
-    signals.b_r = back_to_binary_unipolar(signals.a_KT);
+
+    signals.b_r = back_to_binary_unipolar(signals.a_KT, params.A);
 
 
-    
     % ----------------------------- Funcions extra
-    function missatge = back_to_binary_unipolar(a)
+    function missatge = back_to_binary_unipolar(a, A)
         missatge = [];
         for j = 1:length(a)
-            if a(j) > 0
+            if a(j) > A/2
                 missatge = [missatge 1];
             else
                 missatge = [missatge 0];

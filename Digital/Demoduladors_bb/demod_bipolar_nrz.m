@@ -1,6 +1,6 @@
 function signals = demod_bipolar_nrz(varargin)
     % Parsegem els parèmtres per defecte
-    defaultParams = struct('r', [0 0], 'divisions_pols', 10, 'llista_valors', [1 -1]);
+    defaultParams = struct('r', [0 0], 'divisions_pols', 10, 'llista_valors', [1 -1], 'A', 1);
     params = parse_optional_params(defaultParams, varargin{:});
 
     % Creem la estructura que retornarèm
